@@ -11,5 +11,3 @@ import jakarta.persistence.Id;
 	    private String title;
 	    private String status;
 	}
-
-}

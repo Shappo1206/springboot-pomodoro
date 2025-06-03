@@ -10,7 +10,7 @@ import com.example.demo.model.entity.Todo;
 
 //Spring JPA
 @Repository
-public interface TodoRepository extends JpaRepository<Todo, Integer> {
+public interface UserRepository extends JpaRepository<Todo, Integer> {
     // 如果真的需要可以加：List<TodoEntity> findByProjectId(Integer projectId);
 	
 }

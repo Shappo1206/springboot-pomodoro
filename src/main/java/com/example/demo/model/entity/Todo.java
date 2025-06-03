@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity // 實體類與資料表對應(會自動建立資料表)
 @Table(name = "todos") // 可選:可以手動建立資料表名
-public class TodoEntity {
+public class Todo {
 
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY) // 自動生成 id
