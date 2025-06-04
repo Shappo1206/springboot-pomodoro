@@ -3,10 +3,13 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.dto.TodoDto;
+import com.example.demo.response.ApiResponse;
 import com.example.demo.service.TodoService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,16 +24,30 @@ DELETE /rest/todo/{todoId}   刪除指定 Todo    todoId (路徑參數，待辦 
 */
 
 @RestController //這個東西會自動幫你把方法回傳的物件變成 JSON 格式。
-
 public class TodoController {
 	
-	@Autowired
-	private TodoService todoService;
+
 	
-	@GetMapping("/restapi/todos")
-	public List<TodoDto> getAllTodos() {
-		return todoService.findAllTodos();
+	@GetMapping("/api/todos")
+	public ResponseEntity<ApiResponse<String>> getAllTodos() {
+		try {
+			String a="123";
+	        return ResponseEntity.ok(ApiResponse.success("登入成功", a));
+	    } catch (Exception e) {
+	        return ResponseEntity
+	                .status(HttpStatus.UNAUTHORIZED)
+	                .body(ApiResponse.error(401, "登入失敗: " + e.getMessage()));
+	    }
 	}
 	
-
+	@GetMapping("/api/aaa")
+	public ResponseEntity<ApiResponse<String>> getaaa() {
+		try {
+	        return ResponseEntity.ok(ApiResponse.success("登入成功", "helloAAA"));
+	    } catch (Exception e) {
+	        return ResponseEntity
+	                .status(HttpStatus.UNAUTHORIZED)
+	                .body(ApiResponse.error(401, "登入失敗: " + e.getMessage()));
+	    }
+	}
 }

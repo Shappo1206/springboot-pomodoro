@@ -19,7 +19,5 @@ public class TodoDto {
 	private String description; 
 	private Boolean completed; 
 	private int estimatePomodoroCount;
-	private LocalDateTime createdTime ;
-
-	
+	private LocalDateTime createdTime ;	
 }
