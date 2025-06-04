@@ -6,8 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,9 +20,11 @@ import lombok.NoArgsConstructor;
 public class Todo {
 
 		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY) // 自動生成 id
-		@Column(name = "id")
-		private Integer id; // 主鍵 ID
+		@Column(name = "user_Id", nullable = false)
+		private Integer userId;
+		
+		@Column(name = "todo_id")
+		private Integer todoId; // 主鍵 ID
 		
 		@Column(name = "project_id", nullable = false)
 		private Integer projectId;

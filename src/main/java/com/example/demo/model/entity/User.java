@@ -21,7 +21,7 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 自動生成 id
-	@Column(name = "user_id") // 資料表 user 中預設的欄位名稱
+	@Column(name = "user_id", nullable = false) // 資料表 user 中預設的欄位名稱
 	private Integer userId; // 使用者 ID
 	
 	@Column(name = "username", unique = true, nullable = false, length = 50)
