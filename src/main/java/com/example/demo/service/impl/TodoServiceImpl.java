@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.dto.TodoDto;
 import com.example.demo.model.entity.Todo;
 import com.example.demo.repository.TodoRepository;
 import com.example.demo.service.TodoService;
 
+@Service
 public class TodoServiceImpl implements TodoService{
 
 		//注入
@@ -19,6 +21,7 @@ public class TodoServiceImpl implements TodoService{
 		//查詢所有待辦事項
 		@Override
 		public List<TodoDto> findAllTodos() {
+			System.out.println("👀 Service 被呼叫了 findAllTodos()");
 			return todoRepository.findAll()
 					.stream()
 					.map(entity -> new TodoDto(
