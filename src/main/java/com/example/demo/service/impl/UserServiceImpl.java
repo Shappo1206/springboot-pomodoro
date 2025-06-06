@@ -26,6 +26,14 @@ public class UserServiceImpl implements UserService{
 			.orElse(null); // 或者丟個例外，依你高貴的邏輯
 	}
 
+	/*Service 實作 addUser(UserDto userDto)
+	 * 1｜驗證 DTO 資料是否符合規範（例如：email 格式、密碼長度）
+	 * 2｜使用 userDto.getPassword() 取得密碼欄位
+	 * 3｜產生 salt，並加密密碼（Hash.getSalt() + Hash.getHash()）
+	 * 4｜建立 User Entity（注意這是資料庫用的，不同於 DTO）
+	 * 5｜把 DTO 中的欄位與處理過的密碼值一併塞進 User Entity
+	 * 6｜呼叫 userRepository.save(user) 儲存到資料庫*/
+	
 	// 新增 User
 	@Override
 	public void addUser(UserDto userDto) {

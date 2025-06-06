@@ -11,8 +11,6 @@ public class UserDto {
 
 		private Integer userId; // 主鍵Id
 		private String username; // 項目Id
-		private String salt; // Todo標題
-		private String passwordhash; // Todo說明
 		private String email; // 完成度
 		private boolean active;//番茄鐘數量預估
 		private String role; // 權限
