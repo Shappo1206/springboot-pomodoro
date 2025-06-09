@@ -10,9 +10,9 @@ import lombok.Data;
 public class UserDto {
 
 		private Integer userId; // 主鍵Id
-		private String username; // 項目Id
-		private String email; // 完成度
-		private boolean active;//番茄鐘數量預估
+		private String username; // 
+		private String email; //
+		private boolean active;//
 		private String role; // 權限
 		private LocalDateTime createdAt ; //創建時間
 }
