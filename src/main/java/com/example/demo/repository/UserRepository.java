@@ -19,7 +19,10 @@ import com.example.demo.model.entity.User;
 // Spring JPA
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    // JPA 自動生成以下方法，所以這裡不用實作
+    
+	public boolean findByEmail(String Email);
+	
+	// JPA 自動生成以下方法，所以這裡不用實作
 
     /* 新增方法
     // 保存單個 User
