@@ -1,47 +1,104 @@
 package com.example.demo.controller;
 
-import java.util.List;
+import com.example.demo.model.dto.AddTodoRequestDto;
+import com.example.demo.model.dto.AddTodoResponseDto;
+import com.example.demo.model.dto.TodoDto;
+import com.example.demo.repository.TodoRepository;
+import com.example.demo.response.ApiResponse;
+import com.example.demo.service.TodoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.model.dto.TodoDto;
-import com.example.demo.response.ApiResponse;
-import com.example.demo.service.TodoService;
-import com.example.demo.service.impl.TodoServiceImpl;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-/**
-請求方法 URL 路徑              功能說明      請求參數                                   回應
---------------------------------------------------------------------------------------------------------------------
-GET    /rest/todo            取得所有 Todo 列表 無                                       成功時返回所有 Todo 的列表 payload 及成功訊息。
-GET    /rest/todo/{todoId}   取得指定 Todo 資料 todoId (路徑參數，待辦 ID)                成功時返回指定 Todo 資料及 payload 成功訊息。
-POST   /rest/todo            新增 Todo       請求體包含 todoDto                         成功時返回成功訊息，並包含 payload。
-PUT    /rest/todo/{todoId}   更新指定 Todo 資料 todoId (路徑參數，待辦 ID)，請求體包含 todoDto 成功時返回成功訊息，並包含 payload。
-DELETE /rest/todo/{todoId}   刪除指定 Todo    todoId (路徑參數，待辦 ID)                  成功時返回成功訊息，不包含 payload。
-*/
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
-@RestController //這個東西會自動幫你把方法回傳的物件變成 JSON 格式。
+@RestController
+@RequestMapping("/rest/todo")
 public class TodoController {
-	
-	@Autowired
-	private TodoService todoService;
-	
-	@GetMapping("/api/todos")
-	public ResponseEntity<ApiResponse<List<TodoDto>>> getAllTodos() {
-		try {
-			List<TodoDto> todos = todoService.findAllTodos();
-			return ResponseEntity.ok(ApiResponse.success("登入成功", todos));
-	    } catch (Exception e) {
-	        return ResponseEntity
-	                .status(HttpStatus.UNAUTHORIZED)
-	                .body(ApiResponse.error(401, "登入失敗: " + e.getMessage()));
-	    }
-	}
 
+    @Autowired
+    private TodoService todoService;
+    
+    @Autowired
+    public TodoRepository todoRepository;
+
+    // ✅ 查詢全部 Todo
+ // ✅ 測試用：查詢全部 Todo (含 debug log)
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<List<TodoDto>>> getAllTodos() {
+        try {
+            // 先打個 log 讓你看 service 有沒有被呼叫
+            System.out.println("✅ Controller 被呼叫：getAllTodos()");
+
+            List<TodoDto> todos = todoService.findAllTodos();
+
+            // 印出目前撈出來的筆數
+            System.out.println("✅ 取得筆數：" + todos.size());
+            for (TodoDto todo : todos) {
+                System.out.println("✔ TodoId: " + todo.getTodoId() + " | Title: " + todo.getTitle());
+            }
+
+            return ResponseEntity.ok(ApiResponse.success("查詢成功", todos));
+        } catch (Exception e) {
+            e.printStackTrace(); // 印出完整錯誤方便 debug
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "查詢失敗: " + e.getMessage()));
+        }
+    }
+
+    // ✅ 查詢單筆 Todo
+    @GetMapping("/{todoId}")
+    public ResponseEntity<ApiResponse<TodoDto>> getTodoById(@PathVariable Integer todoId) {
+        try {
+            TodoDto todo = todoService.getTodoById(todoId);
+            return ResponseEntity.ok(ApiResponse.success("查詢成功", todo));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.error(404, "找不到資料: " + e.getMessage()));
+        }
+    }
+
+    // ✅ 新增 Todo
+    @PostMapping
+    public ResponseEntity<ApiResponse<AddTodoResponseDto>> createTodo(@RequestBody AddTodoRequestDto request) {
+        try {
+            AddTodoResponseDto response = todoService.addTodo(request);
+            return ResponseEntity.ok(ApiResponse.success("新增成功", response));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "新增失敗: " + e.getMessage()));
+        }
+    }
+
+    // ✅ 更新 Todo
+    @PutMapping("/put/{todoId}")
+    public ResponseEntity<ApiResponse<String>> updateTodo(@PathVariable Integer todoId, @RequestBody AddTodoRequestDto request) {
+        try {
+            todoService.updateTodo(todoId, request);
+            return ResponseEntity.ok(ApiResponse.success("更新成功", null));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "更新失敗: " + e.getMessage()));
+        }
+    }
+
+    // ✅ 刪除 Todo
+    @DeleteMapping("/rm/{todoId}")
+    public ResponseEntity<ApiResponse<String>> deleteTodo(@PathVariable Integer todoId) {
+        try {
+            todoService.deleteTodo(todoId);
+            return ResponseEntity.ok(ApiResponse.success("刪除成功", null));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "刪除失敗: " + e.getMessage()));
+        }
+    }
 }

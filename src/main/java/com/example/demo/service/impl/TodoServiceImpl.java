@@ -1,77 +1,119 @@
 package com.example.demo.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.dto.AddTodoRequestDto;
+import com.example.demo.model.dto.AddTodoResponseDto;
 import com.example.demo.model.dto.TodoDto;
 import com.example.demo.model.entity.Todo;
 import com.example.demo.repository.TodoRepository;
 import com.example.demo.service.TodoService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
-public class TodoServiceImpl implements TodoService{
+public class TodoServiceImpl implements TodoService {
 
-		//注入
-		@Autowired
-		private TodoRepository todoRepository;
-		
-		//查詢所有待辦事項
-		@Override
-		public List<TodoDto> findAllTodos() {
-			System.out.println("👀 Service 被呼叫了 findAllTodos()");
-			return todoRepository.findAll()
-					.stream()
-					.map(entity -> new TodoDto(
-//							entity.getUserId(), // Id
-							entity.getTodoId(),
-							entity.getProjectId(),
-							entity.getTitle(),
-							entity.getDescription(),
-							entity.isCompleted(),
-							entity.getEstimatePomodoroCount(),
-							entity.getCreatedTime()
-							))
-					        .collect(Collectors.toList());
-		}
+    @Autowired
+    private TodoRepository todoRepository;
 
-		@Override
-		public TodoDto getTodoById(Integer todoId) {
-			// TODO Auto-generated method stub
-			return null;
-		}
+    @Override
+    public List<TodoDto> findAllTodos() {
+        List<Todo> todos = todoRepository.findAll();
+        System.out.println("資料庫回傳幾筆：" + todos.size());
 
-		@Override
-		public void addTodo(TodoDto todoDto) {
-			// TODO Auto-generated method stub
-			
-		}
+        List<TodoDto> todoDtos = todos.stream()
+                .map(entity -> new TodoDto(
+                        entity.getTodoId(),
+                        entity.getProjectId(),
+                        entity.getTitle(),
+                        entity.getDescription(),
+                        entity.isCompleted(),
+                        entity.getEstimatePomodoroCount(),
+                        entity.getCreatedTime()
+                ))
+                .collect(Collectors.toList());
 
-		@Override
-		public void addTodo(Integer todoId, String todoTitle, Integer estimatePomodoroCount) {
-			// TODO Auto-generated method stub
-			
-		}
+        return todoDtos;
+    }
 
-		@Override
-		public void updateTodo(Integer todoId, TodoDto todoDto) {
-			// TODO Auto-generated method stub
-			
-		}
+    // 查詢單筆 Todo
+    @Override
+    public TodoDto getTodoById(Integer todoId) {
+        Optional<Todo> todoOpt = todoRepository.findById(todoId);
+        if (todoOpt.isPresent()) {
+            Todo entity = todoOpt.get();
+            return new TodoDto(
+                    entity.getTodoId(),
+                    entity.getProjectId(),
+                    entity.getTitle(),
+                    entity.getDescription(),
+                    entity.isCompleted(),
+                    entity.getEstimatePomodoroCount(),
+                    entity.getCreatedTime());
+        } else {
+            return null; // 你也可以改成丟出自訂 exception
+        }
+    }
 
-		@Override
-		public void updateTodo(Integer todoId, String todoTitle, Integer estimatePomodoroCount) {
-			// TODO Auto-generated method stub
-			
-		}
+ // 新增 Todo
+    @Override
+    public AddTodoResponseDto addTodo(AddTodoRequestDto requestDto) {
+        Todo entity = new Todo();
+        entity.setUserId(requestDto.getUserId());
+        entity.setProjectId(requestDto.getProjectId());
+        entity.setTitle(requestDto.getTitle());
+        entity.setDescription(requestDto.getDescription());
+        entity.setCompleted(false);  // 新增時預設尚未完成
+        entity.setEstimatePomodoroCount(requestDto.getEstimatePomodoroCount());
+        entity.setCreatedTime(LocalDateTime.now());
 
-		@Override
-		public void deleteTodo(Integer todoId) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		
+        // 儲存到資料庫
+        Todo saved = todoRepository.save(entity);
+
+        // 包裝回傳結果 (補齊完整欄位)
+        AddTodoResponseDto response = new AddTodoResponseDto();
+        response.setTodoId(saved.getTodoId());
+        response.setProjectId(saved.getProjectId());
+        response.setTitle(saved.getTitle());
+        response.setDescription(saved.getDescription());
+        response.setCompleted(saved.isCompleted());
+        response.setEstimatePomodoroCount(saved.getEstimatePomodoroCount());
+        response.setMessage("新增成功！");
+
+        return response;
+    }
+
+ // 更新 Todo
+    @Override
+    public void updateTodo(Integer todoId, AddTodoRequestDto requestDto) {
+        Optional<Todo> todoOpt = todoRepository.findById(todoId);
+        if (todoOpt.isPresent()) {
+            Todo entity = todoOpt.get();
+            entity.setProjectId(requestDto.getProjectId());
+            entity.setTitle(requestDto.getTitle());
+            entity.setDescription(requestDto.getDescription());
+            entity.setCompleted(requestDto.getCompleted());
+            entity.setEstimatePomodoroCount(requestDto.getEstimatePomodoroCount());
+            todoRepository.save(entity);
+        }
+    }
+
+
+    // 刪除 Todo
+    @Override
+    public void deleteTodo(Integer todoId) {
+    	if (!todoRepository.existsById(todoId)) {
+            throw new EntityNotFoundException("找不到 todoId: " + todoId);
+        }
+        todoRepository.deleteById(todoId);
+    }
+
+
 }
