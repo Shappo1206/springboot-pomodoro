@@ -36,7 +36,7 @@ public class Todo {
     private boolean completed;
 
     @Column(name = "estimate_pomodoro", nullable = false)
-    private int estimatePomodoroCount;
+    private Integer estimatePomodoroCount;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
