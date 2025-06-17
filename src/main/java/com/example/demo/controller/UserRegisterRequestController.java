@@ -42,7 +42,7 @@ public class UserRegisterRequestController {
 	//		return;
 	//	}
 	
-	@PostMapping("/api/user/register")
+	@PostMapping("/user/register")
 	public ApiResponse<Void> addUser(@RequestBody @Valid UserRegisterRequestDto request) {
 		/*方法內部邏輯流程：
 		 * 接收並驗證前端傳來的註冊資料

@@ -9,11 +9,11 @@ import com.example.demo.model.entity.TimerSession;
 //在 TimerSession Repository 中加入統計方法
 public interface TimerSessionRepository extends JpaRepository<TimerSession, Integer>{
  // 統計特定待辦事項已完成的番茄鐘數量
- Integer countCompletedPomodorosByTodoId(Integer todoId);
+ //Integer countCompletedPomodorosByTodoId(Integer todoId);
  
  // 統計特定待辦事項正在進行的番茄鐘數量
- Integer countRunningPomodorosByTodoId(Integer todoId);
+ //Integer countRunningPomodorosByTodoId(Integer todoId);
  
  // 統計特定待辦事項的總工作時間
- Integer sumActualDurationByTodoId(Integer todoId);
+ //Integer sumActualDurationByTodoId(Integer todoId);
 }

@@ -7,6 +7,8 @@ import com.example.demo.repository.TodoRepository;
 import com.example.demo.response.ApiResponse;
 import com.example.demo.service.TodoService;
 
+import lombok.Data;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

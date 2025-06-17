@@ -26,20 +26,6 @@ public class Setting {
 	@Column(name = "user_id", nullable = false) // 資料表 user 中預設的欄位名稱
 	private Integer userId; // 使用者 ID
 	
-//	@Column(name = "pomodoro_duration", unique = true, nullable = false, length = 50)
-//	private Integer  ;
-//	
-//	@Column(name = "short_break_duration", nullable = false)
-//	private Integer ;
-//	
-//	@Column(name = "long_break_duration", nullable = false)
-//	private Integer ;
-//
-//	@Column(name = "long_break_interval", nullable = false)
-//	private Integer ;
-//	
-//	@Column(name = "auto_start_breaks")
-//	private Boolean active;
 	
 	@Column(name = "role")
 	private String role;
