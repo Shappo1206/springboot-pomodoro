@@ -31,7 +31,6 @@ public class TodoServiceImpl implements TodoService {
         List<TodoDto> todoDtos = todos.stream()
                 .map(entity -> new TodoDto(
                         entity.getTodoId(),
-                        entity.getProjectId(),
                         entity.getTitle(),
                         entity.getDescription(),
                         entity.isCompleted(),
@@ -51,7 +50,6 @@ public class TodoServiceImpl implements TodoService {
             Todo entity = todoOpt.get();
             return new TodoDto(
                     entity.getTodoId(),
-                    entity.getProjectId(),
                     entity.getTitle(),
                     entity.getDescription(),
                     entity.isCompleted(),
@@ -67,7 +65,6 @@ public class TodoServiceImpl implements TodoService {
     public AddTodoResponseDto addTodo(AddTodoRequestDto requestDto) {
         Todo entity = new Todo();
         entity.setUserId(requestDto.getUserId());
-        entity.setProjectId(requestDto.getProjectId());
         entity.setTitle(requestDto.getTitle());
         entity.setDescription(requestDto.getDescription());
         entity.setCompleted(false);  // 新增時預設尚未完成
@@ -80,7 +77,6 @@ public class TodoServiceImpl implements TodoService {
         // 包裝回傳結果 (補齊完整欄位)
         AddTodoResponseDto response = new AddTodoResponseDto();
         response.setTodoId(saved.getTodoId());
-        response.setProjectId(saved.getProjectId());
         response.setTitle(saved.getTitle());
         response.setDescription(saved.getDescription());
         response.setCompleted(saved.isCompleted());
@@ -96,7 +92,6 @@ public class TodoServiceImpl implements TodoService {
         Optional<Todo> todoOpt = todoRepository.findById(todoId);
         if (todoOpt.isPresent()) {
             Todo entity = todoOpt.get();
-            entity.setProjectId(requestDto.getProjectId());
             entity.setTitle(requestDto.getTitle());
             entity.setDescription(requestDto.getDescription());
             entity.setCompleted(requestDto.getCompleted());

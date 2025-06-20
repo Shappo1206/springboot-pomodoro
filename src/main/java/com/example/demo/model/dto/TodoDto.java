@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 public class TodoDto {
 	//private Integer userId; // Id
 	private Integer todoId; // Id
-	private Integer projectId; // 專案ID
 	private String title; 
 	private String description; 
 	private Boolean completed; 

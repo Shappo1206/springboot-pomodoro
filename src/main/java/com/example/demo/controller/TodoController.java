@@ -7,6 +7,7 @@ import com.example.demo.repository.TodoRepository;
 import com.example.demo.response.ApiResponse;
 import com.example.demo.service.TodoService;
 
+import jakarta.validation.Valid;
 import lombok.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
+
+@CrossOrigin(origins = {"http://localhost:5173"} , allowCredentials = "true")//跨域請求，每個controller都要加
 @RestController
 @RequestMapping("/rest/todo")
 public class TodoController {
@@ -33,14 +35,14 @@ public class TodoController {
     public ResponseEntity<ApiResponse<List<TodoDto>>> getAllTodos() {
         try {
             // 先打個 log 讓你看 service 有沒有被呼叫
-            System.out.println("✅ Controller 被呼叫：getAllTodos()");
+            //System.out.println("✅ Controller 被呼叫：getAllTodos()");
 
             List<TodoDto> todos = todoService.findAllTodos();
 
             // 印出目前撈出來的筆數
-            System.out.println("✅ 取得筆數：" + todos.size());
+            //System.out.println("✅ 取得筆數：" + todos.size());
             for (TodoDto todo : todos) {
-                System.out.println("✔ TodoId: " + todo.getTodoId() + " | Title: " + todo.getTitle());
+                //System.out.println("✔ TodoId: " + todo.getTodoId() + " | Title: " + todo.getTitle());
             }
 
             return ResponseEntity.ok(ApiResponse.success("查詢成功", todos));
@@ -53,7 +55,7 @@ public class TodoController {
     }
 
     // ✅ 查詢單筆 Todo
-    @GetMapping("/{todoId}")
+    @GetMapping("/find/{todoId}")
     public ResponseEntity<ApiResponse<TodoDto>> getTodoById(@PathVariable Integer todoId) {
         try {
             TodoDto todo = todoService.getTodoById(todoId);
@@ -66,9 +68,10 @@ public class TodoController {
     }
 
     // ✅ 新增 Todo
-    @PostMapping
-    public ResponseEntity<ApiResponse<AddTodoResponseDto>> createTodo(@RequestBody AddTodoRequestDto request) {
+    @PostMapping("")
+    public ResponseEntity<ApiResponse<AddTodoResponseDto>> createTodo(@Valid @RequestBody AddTodoRequestDto request) {
         try {
+        	System.out.println(request);
             AddTodoResponseDto response = todoService.addTodo(request);
             return ResponseEntity.ok(ApiResponse.success("新增成功", response));
         } catch (Exception e) {
