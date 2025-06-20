@@ -23,11 +23,17 @@ import java.util.List;
 @RequestMapping("/rest/todo")
 public class TodoController {
 
+    private final UserRegisterRequestController userRegisterRequestController;
+
     @Autowired
     private TodoService todoService;
     
     @Autowired
     public TodoRepository todoRepository;
+
+    TodoController(UserRegisterRequestController userRegisterRequestController) {
+        this.userRegisterRequestController = userRegisterRequestController;
+    }
 
     // ✅ 查詢全部 Todo
  // ✅ 測試用：查詢全部 Todo (含 debug log)
@@ -69,9 +75,9 @@ public class TodoController {
 
     // ✅ 新增 Todo
     @PostMapping("")
-    public ResponseEntity<ApiResponse<AddTodoResponseDto>> createTodo(@Valid @RequestBody AddTodoRequestDto request) {
-        try {
-        	System.out.println(request);
+    public ResponseEntity<ApiResponse<AddTodoResponseDto>> createTodo(@RequestBody AddTodoRequestDto request) {
+    	System.out.println("有進入POST");
+    	try {
             AddTodoResponseDto response = todoService.addTodo(request);
             return ResponseEntity.ok(ApiResponse.success("新增成功", response));
         } catch (Exception e) {

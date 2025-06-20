@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 // UserDto 對應於 User Entity
 // 屬性名稱可以與所對應的 entity 不同
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class TodoDto {
 	//private Integer userId; // Id
 	private Integer todoId; // Id
