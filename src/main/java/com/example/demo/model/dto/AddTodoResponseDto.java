@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddTodoResponseDto {
     private Integer todoId;
-    private Integer projectId;
     private String title;
     private String description;
     private Boolean completed;

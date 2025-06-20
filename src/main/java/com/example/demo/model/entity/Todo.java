@@ -20,11 +20,8 @@ public class Todo {
     @Column(name = "todo_id")
     private Integer todoId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = true)
     private Integer userId;
-
-    @Column(name = "project_id", nullable = false)
-    private Integer projectId;
 
     @Column(name = "title", nullable = false, length = 50)
     private String title;
