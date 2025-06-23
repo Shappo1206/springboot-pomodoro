@@ -31,6 +31,9 @@ public class Todo {
 
     @Column(name = "completed", nullable = false)
     private boolean completed;
+    
+    @Column(name = "completed_pomodoros", nullable = false)
+    private Integer completedPomodoroCount = 0;
 
     @Column(name = "estimate_pomodoro", nullable = false)
     private Integer estimatePomodoroCount;

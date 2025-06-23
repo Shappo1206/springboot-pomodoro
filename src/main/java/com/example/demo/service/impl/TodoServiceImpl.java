@@ -34,6 +34,7 @@ public class TodoServiceImpl implements TodoService {
                         entity.getTitle(),
                         entity.getDescription(),
                         entity.isCompleted(),
+                        entity.getCompletedPomodoroCount(),
                         entity.getEstimatePomodoroCount(),
                         entity.getCreatedTime()
                 ))
@@ -53,6 +54,7 @@ public class TodoServiceImpl implements TodoService {
                     entity.getTitle(),
                     entity.getDescription(),
                     entity.isCompleted(),
+                    entity.getCompletedPomodoroCount(),
                     entity.getEstimatePomodoroCount(),
                     entity.getCreatedTime());
         } else {
